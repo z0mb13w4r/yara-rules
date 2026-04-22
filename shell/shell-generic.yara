@@ -1,4 +1,4 @@
-rule SHELL_000_scripts
+rule SHELL_0000_scripts
 {
     meta:
         description = "Shell scripts"
@@ -16,7 +16,7 @@ rule SHELL_000_scripts
         $s5 at 0
 }
 
-rule SHELL_001_scripts_linguist
+rule SHELL_0001_scripts_linguist
 {
 	meta:
 		description = "Match *nix shell scripts"
