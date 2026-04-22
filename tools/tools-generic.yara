@@ -1,5 +1,8 @@
 rule TOOLS_0000_nmap
 {
+	meta:
+		description = "Nmap network scanner"
+		reference = "https://nmap.org"
     strings:
         $ = "Usage: nmap [Scan Type(s)] [Options] {target specification}"
     condition:
@@ -124,15 +127,15 @@ rule TOOLS_0002_SHA256_constants
 
 rule TOOLS_0003_crypto_constants_crc32
 {
-	meta:
-		author = "Daniel Roberson"
-		description = "crc32 constants"
-	strings:
-		$r4 = { 96300777 }
-		$r5 = { 2c610eee }
-		$r6 = { ba510999 }
-		$r7 = { 19c46d07 }
-		$r8 = { 8ff46a70 }
+    meta:
+        author = "Daniel Roberson"
+        description = "crc32 constants"
+    strings:
+        $r4 = { 96300777 }
+        $r5 = { 2c610eee }
+        $r6 = { ba510999 }
+        $r7 = { 19c46d07 }
+        $r8 = { 8ff46a70 }
 /*$r9 = { 35a563e9 }
 $r10 = { a395649e }
 $r11 = { 3288db0e }
@@ -153,20 +156,34 @@ $r25 = { 51b5d4f4 }
 $r26 = { c785d383 }
 $r27 = { 56986c13 }
 */
-	condition:
-		all of them
+    condition:
+        all of them
 }
 
-rule TOOLS_0004_base64_alphabet
+rule TOOLS_0004_rc4_ksa
 {
-	meta:
-		description = "Base64 alphabet"
+    meta:
+        author = "Thomas Barabosch"
+        description = "Searches potential setup loops of RC4's KSA"
+    strings:
+        $s0 = { 3d 00 01 00 00 }       // cmp eax, 256
+        $s1 = { 81 f? 00 01 00 00 }    // cmp {ebx, ecx, edx}, 256
+        $s2 = { 48 3d 00 01 00 00 }    // cmp rax, 256
+        $s3 = { 48 81 f? 00 01 00 00 } // cmp {rbx, rcx, ...}, 256
+    condition:
+        any of them
+}
 
-	strings:
-		$ = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" ascii wide
+rule TOOLS_0005_base64_alphabet
+{
+    meta:
+        description = "Base64 alphabet"
 
-	condition:
-		all of them
+    strings:
+        $ = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" ascii wide
+
+    condition:
+        all of them
 }
 
 rule TOOLS_0006_salsa20_constants
@@ -182,19 +199,19 @@ rule TOOLS_0006_salsa20_constants
 
 rule TOOLS_0007_murmurhash_constants
 {
-	meta:
-		author = "Daniel Roberson"
-		description = "mmh3 constants"
-	strings:
-		$c1 = { 512d9ecc }
-		$c2 = { 9335871b }
-		$c3 = { 646b54e6 }
-		$c4 = { 35aeb2c2 }
-	condition:
-		all of them
+    meta:
+        author = "Daniel Roberson"
+        description = "mmh3 constants"
+    strings:
+        $c1 = { 512d9ecc }
+        $c2 = { 9335871b }
+        $c3 = { 646b54e6 }
+        $c4 = { 35aeb2c2 }
+    condition:
+        all of them
 }
 
-rule TOOLS_0007_sockets
+rule TOOLS_0008_sockets
 {
     meta:
         description = "Berkeley Sockets API"
@@ -211,7 +228,7 @@ rule TOOLS_0007_sockets
         $socket and 2 of them
 }
 
-rule TOOLS_0008_winsock
+rule TOOLS_0009_winsock
 {
     meta:
         description = "Utilizes Winsock"
@@ -223,7 +240,7 @@ rule TOOLS_0008_winsock
         any of them
 }
 
-rule TOOLS_0009_shc
+rule TOOLS_0010_shc
 {
     meta:
         description = "Compiled with generic shell script compiler (shc)"
@@ -237,70 +254,113 @@ rule TOOLS_0009_shc
         uint32(0) == 0x464c457f and all of them
 }
 
-rule TOOLS_0010_golang
-{
-    meta:
-        description = "Golang"
-    strings:
-        $s1 = "Go build"
-        $s2 = "go.build"
-        $go = "/go-"
-    condition:
-        any of ($s*) or #go > 10
-}
-
-rule TOOLS_0011_socat
+rule TOOLS_0011_gscript
 {
 	meta:
-		description = "socat multipurpose relay"
-		reference = "http://www.dest-unreach.org/socat/"
+		description = "https://github.com/gen0cide/gscript"
 	strings:
-		$ = "socat version %s on %s"
-	condition:
-		all of them
-}
-
-rule TOOLS_0012_loki2
-{
-	meta:
-		description = "http://phrack.org/issues/51/6.html"
-	strings:
-		$a = "lokid: inactive client <%d> expired from list [%d]"
-		$b = "[SUPER fatal] control should NEVER fall here"
+		$ = "github.com/gen0cide/gscript"
 	condition:
 		any of them
 }
 
-rule TOOLS_0013_pyinstaller
+rule TOOLS_0012_autoit3
 {
 	meta:
-		description = "https://www.pyinstaller.org/"
+		description = "AutoIt 3"
+		reference = "https://www.autoitscript.com/site/"
+		decompiler = "http://domoticx.com/autoit3-decompiler-exe2aut/"
 	strings:
-		$a = "_MEIPASS"
+		$ = "AutoIt v3" wide
+	condition:
+		uint16(0) == 0x5a4d and all of them
+}
+
+rule TOOLS_0013_socat
+{
+    meta:
+        description = "socat multipurpose relay"
+        reference = "http://www.dest-unreach.org/socat/"
+    strings:
+        $ = "socat version %s on %s"
+    condition:
+        all of them
+}
+
+rule TOOLS_0014_loki2
+{
+    meta:
+        description = "http://phrack.org/issues/51/6.html"
+    strings:
+        $a = "lokid: inactive client <%d> expired from list [%d]"
+        $b = "[SUPER fatal] control should NEVER fall here"
+    condition:
+        any of them
+}
+
+rule TOOLS_0015_pyinstaller
+{
+    meta:
+        description = "https://www.pyinstaller.org/"
+    strings:
+        $a = "_MEIPASS"
+    condition:
+        all of them
+}
+
+rule TOOLS_0016_tinymet
+{
+    meta:
+        description = "https://github.com/SherifEldeeb/TinyMet"
+    strings:
+        $a = "tinymet.com"
+        $b = "TinyMet"
+        $c = "Available transports are as follows:"
+    condition:
+        all of them
+}
+
+rule TOOLS_0017_nanomet
+{
+    meta:
+        description = "https://github.com/kost/nanomet"
+    strings:
+        $a = "github.com/kost/nanomet"
+        $b = "nanomet.exe"
+        $c = "Available transports are as follows:"
+    condition:
+        all of them
+}
+
+rule TOOLS_0018_prism
+{
+	meta:
+		author = "Daniel Roberson"
+		description = "https://github.com/andreafabrizi/prism"
+	strings:
+		$a = "PRISM"
+		$b = "I'm not root :("
 	condition:
 		all of them
 }
 
-rule TOOLS_0014_tinymet
+rule TOOLS_0019_masscan
 {
 	meta:
-		description = "https://github.com/SherifEldeeb/TinyMet"
+		description = "https://github.com/robertdavidgraham/masscan"
 	strings:
-		$a = "tinymet.com"
-		$b = "TinyMet"
-		$c = "Available transports are as follows:"
+		$a = " masscan -"
+		$b = "https://github.com/robertdavidgraham/masscan"
 	condition:
-		all of them
+		any of them
 }
 
-rule TOOLS_0015_nanomet
+rule TOOLS_0020_ptrace
 {
 	meta:
-		description = "https://github.com/kost/nanomet"
+		description = "ELF files possibly abusing ptrace"
 	strings:
-		$a = "github.com/kost/nanomet"
-		$b = "nanomet.exe"
-		$c = "Available transports are as follows:"
+		$ = "ptrace"
 	condition:
-		all of them
+		uint32(0) == 0x464c457f and all of them
 }
