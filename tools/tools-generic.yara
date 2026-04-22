@@ -1,4 +1,4 @@
-rule TOOLS_00000_nmap
+rule TOOLS_0000_nmap
 {
     strings:
         $ = "Usage: nmap [Scan Type(s)] [Options] {target specification}"
@@ -122,7 +122,54 @@ rule TOOLS_0002_SHA256_constants
         all of them
 }
 
-rule TOOLS_0003_salsa20_constants
+rule TOOLS_0003_crypto_constants_crc32
+{
+	meta:
+		author = "Daniel Roberson"
+		description = "crc32 constants"
+	strings:
+		$r4 = { 96300777 }
+		$r5 = { 2c610eee }
+		$r6 = { ba510999 }
+		$r7 = { 19c46d07 }
+		$r8 = { 8ff46a70 }
+/*$r9 = { 35a563e9 }
+$r10 = { a395649e }
+$r11 = { 3288db0e }
+$r12 = { a4b8dc79 }
+$r13 = { 1ee9d5e0 }
+$r14 = { 88d9d297 }
+$r15 = { 2b4cb609 }
+$r16 = { bd7cb17e }
+$r17 = { 072db8e7 }
+$r18 = { 911dbf90 }
+$r19 = { 6410b71d }
+$r20 = { f220b06a }
+$r21 = { 4871b9f3 }
+$r22 = { de41be84 }
+$r23 = { 7dd4da1a }
+$r24 = { ebe4dd6d }
+$r25 = { 51b5d4f4 }
+$r26 = { c785d383 }
+$r27 = { 56986c13 }
+*/
+	condition:
+		all of them
+}
+
+rule TOOLS_0004_base64_alphabet
+{
+	meta:
+		description = "Base64 alphabet"
+
+	strings:
+		$ = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" ascii wide
+
+	condition:
+		all of them
+}
+
+rule TOOLS_0006_salsa20_constants
 {
     meta:
         description = "Salsa20 stream cipher constants. Used by various ransomware"
@@ -133,7 +180,21 @@ rule TOOLS_0003_salsa20_constants
         all of them
 }
 
-rule TOOLS_0004_sockets
+rule TOOLS_0007_murmurhash_constants
+{
+	meta:
+		author = "Daniel Roberson"
+		description = "mmh3 constants"
+	strings:
+		$c1 = { 512d9ecc }
+		$c2 = { 9335871b }
+		$c3 = { 646b54e6 }
+		$c4 = { 35aeb2c2 }
+	condition:
+		all of them
+}
+
+rule TOOLS_0007_sockets
 {
     meta:
         description = "Berkeley Sockets API"
@@ -150,7 +211,7 @@ rule TOOLS_0004_sockets
         $socket and 2 of them
 }
 
-rule TOOLS_0005_winsock
+rule TOOLS_0008_winsock
 {
     meta:
         description = "Utilizes Winsock"
@@ -162,28 +223,84 @@ rule TOOLS_0005_winsock
         any of them
 }
 
-rule TOOLS_0006_shc
+rule TOOLS_0009_shc
 {
-	meta:
-		description = "Compiled with generic shell script compiler (shc)"
-		reference = "https://github.com/neurobin/shc"
-		decompiler = "https://github.com/yanncam/UnSHc"
-	strings:
-		$ = "=%lu %d"
-		$ = "%lu %d%c"
-		$ = "%s%s%s: %s"
-	condition:
-		uint32(0) == 0x464c457f and all of them
+    meta:
+        description = "Compiled with generic shell script compiler (shc)"
+        reference = "https://github.com/neurobin/shc"
+        decompiler = "https://github.com/yanncam/UnSHc"
+    strings:
+        $ = "=%lu %d"
+        $ = "%lu %d%c"
+        $ = "%s%s%s: %s"
+    condition:
+        uint32(0) == 0x464c457f and all of them
 }
 
-rule TOOLS_0007_golang
+rule TOOLS_0010_golang
+{
+    meta:
+        description = "Golang"
+    strings:
+        $s1 = "Go build"
+        $s2 = "go.build"
+        $go = "/go-"
+    condition:
+        any of ($s*) or #go > 10
+}
+
+rule TOOLS_0011_socat
 {
 	meta:
-		description = "Golang"
+		description = "socat multipurpose relay"
+		reference = "http://www.dest-unreach.org/socat/"
 	strings:
-		$s1 = "Go build"
-		$s2 = "go.build"
-		$go = "/go-"
+		$ = "socat version %s on %s"
 	condition:
-		any of ($s*) or #go > 10
+		all of them
+}
+
+rule TOOLS_0012_loki2
+{
+	meta:
+		description = "http://phrack.org/issues/51/6.html"
+	strings:
+		$a = "lokid: inactive client <%d> expired from list [%d]"
+		$b = "[SUPER fatal] control should NEVER fall here"
+	condition:
+		any of them
+}
+
+rule TOOLS_0013_pyinstaller
+{
+	meta:
+		description = "https://www.pyinstaller.org/"
+	strings:
+		$a = "_MEIPASS"
+	condition:
+		all of them
+}
+
+rule TOOLS_0014_tinymet
+{
+	meta:
+		description = "https://github.com/SherifEldeeb/TinyMet"
+	strings:
+		$a = "tinymet.com"
+		$b = "TinyMet"
+		$c = "Available transports are as follows:"
+	condition:
+		all of them
+}
+
+rule TOOLS_0015_nanomet
+{
+	meta:
+		description = "https://github.com/kost/nanomet"
+	strings:
+		$a = "github.com/kost/nanomet"
+		$b = "nanomet.exe"
+		$c = "Available transports are as follows:"
+	condition:
+		all of them
 }
