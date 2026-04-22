@@ -1,4 +1,4 @@
-rule TOOLS_0000_nmap
+rule TOOLS_00000_nmap
 {
     strings:
         $ = "Usage: nmap [Scan Type(s)] [Options] {target specification}"
@@ -6,7 +6,7 @@ rule TOOLS_0000_nmap
         all of them
 }
 
-rule TOOLS_001_MD5_constants
+rule TOOLS_0001_MD5_constants
 {
     meta:
         author = "Daniel Roberson"
@@ -88,77 +88,102 @@ rule TOOLS_001_MD5_constants
         all of them
 }
 
-rule TOOLS_002_SHA256_constants
+rule TOOLS_0002_SHA256_constants
 {
-	meta:
-		description = "SHA256 constants"
-	strings:
-		$ = { 852c7292 }
-		$ = { a1e8bfa2 }
-		$ = { 4b661aa8 }
-		$ = { 708b4bc2 }
-		$ = { a3516cc7 }
-		$ = { 19e892d1 }
-		$ = { 240699d6 }
-		$ = { 85350ef4 }
-		$ = { 70a06a10 }
-		$ = { 16c1a419 }
-		$ = { 086c371e }
-		$ = { 4c774827 }
-		$ = { b5bcb034 }
-		$ = { b30c1c39 }
-		$ = { 4aaad84e }
-		$ = { 4fca9c5b }
-		$ = { f36f2e68 }
-		$ = { ee828f74 }
-		$ = { 6f63a578 }
-		$ = { 1478c884 }
-		$ = { 0802c78c }
-		$ = { faffbe90 }
-		$ = { eb6c50a4 }
-		$ = { f7a3f9be }
-		$ = { f27871c6 }
-	condition:
-		all of them
+    meta:
+        description = "SHA256 constants"
+    strings:
+        $ = { 852c7292 }
+        $ = { a1e8bfa2 }
+        $ = { 4b661aa8 }
+        $ = { 708b4bc2 }
+        $ = { a3516cc7 }
+        $ = { 19e892d1 }
+        $ = { 240699d6 }
+        $ = { 85350ef4 }
+        $ = { 70a06a10 }
+        $ = { 16c1a419 }
+        $ = { 086c371e }
+        $ = { 4c774827 }
+        $ = { b5bcb034 }
+        $ = { b30c1c39 }
+        $ = { 4aaad84e }
+        $ = { 4fca9c5b }
+        $ = { f36f2e68 }
+        $ = { ee828f74 }
+        $ = { 6f63a578 }
+        $ = { 1478c884 }
+        $ = { 0802c78c }
+        $ = { faffbe90 }
+        $ = { eb6c50a4 }
+        $ = { f7a3f9be }
+        $ = { f27871c6 }
+    condition:
+        all of them
 }
 
-rule TOOLS_003_salsa20_constants
+rule TOOLS_0003_salsa20_constants
 {
-	meta:
-		description = "Salsa20 stream cipher constants. Used by various ransomware"
-		reference = "https://github.com/alexwebr/salsa20/blob/master/salsa20.c#L118-L125"
-	strings:
-		$ = "expand 32-byte k"
-	condition:
-		all of them
+    meta:
+        description = "Salsa20 stream cipher constants. Used by various ransomware"
+        reference = "https://github.com/alexwebr/salsa20/blob/master/salsa20.c#L118-L125"
+    strings:
+        $ = "expand 32-byte k"
+    condition:
+        all of them
 }
 
-rule TOOLS_004_sockets
+rule TOOLS_0004_sockets
 {
-	meta:
-		description = "Berkeley Sockets API"
-		reference = "https://en.wikipedia.org/wiki/Berkeley_sockets"
-		author = "Daniel Roberson"
-	strings:
-		$socket = "socket" fullword
-		$ = "accept" fullword
-		$ = "bind" fullword
-		$ = "getsockname" fullword
-		$ = "listen" fullword
-		$ = "close" fullword
-	condition:
-		$socket and 2 of them
+    meta:
+        description = "Berkeley Sockets API"
+        reference = "https://en.wikipedia.org/wiki/Berkeley_sockets"
+        author = "Daniel Roberson"
+    strings:
+        $socket = "socket" fullword
+        $ = "accept" fullword
+        $ = "bind" fullword
+        $ = "getsockname" fullword
+        $ = "listen" fullword
+        $ = "close" fullword
+    condition:
+        $socket and 2 of them
 }
 
-rule TOOLS_005_winsock
+rule TOOLS_0005_winsock
 {
-	meta:
-		description = "Utilizes Winsock"
-		reference = "https://docs.microsoft.com/en-us/windows/win32/winsock/initializing-winsock"
-	strings:
-		$ = "WSAStartup" ascii wide
-		$ = "ws2_32.dll" ascii wide nocase
-	condition:
-		any of them
+    meta:
+        description = "Utilizes Winsock"
+        reference = "https://docs.microsoft.com/en-us/windows/win32/winsock/initializing-winsock"
+    strings:
+        $ = "WSAStartup" ascii wide
+        $ = "ws2_32.dll" ascii wide nocase
+    condition:
+        any of them
 }
 
+rule TOOLS_0006_shc
+{
+	meta:
+		description = "Compiled with generic shell script compiler (shc)"
+		reference = "https://github.com/neurobin/shc"
+		decompiler = "https://github.com/yanncam/UnSHc"
+	strings:
+		$ = "=%lu %d"
+		$ = "%lu %d%c"
+		$ = "%s%s%s: %s"
+	condition:
+		uint32(0) == 0x464c457f and all of them
+}
+
+rule TOOLS_0007_golang
+{
+	meta:
+		description = "Golang"
+	strings:
+		$s1 = "Go build"
+		$s2 = "go.build"
+		$go = "/go-"
+	condition:
+		any of ($s*) or #go > 10
+}
