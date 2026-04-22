@@ -36,6 +36,7 @@ echo "   **************************"
 for f in $(get)
 do
   if [ "${f}" == "." ]; then
+    BASE="."
     NAME="index.yar"
     echo "[+] Generating index..."
   else
