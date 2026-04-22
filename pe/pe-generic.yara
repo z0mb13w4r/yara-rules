@@ -1,4 +1,4 @@
-rule PE_000_File_Header
+rule PE_0000_File_Header
 {
     meta:
         description = "PE file 'MZ' header as string"
