@@ -3,5 +3,6 @@
 #### Build everything:
 
 ```bash
-build.sh
+yara-rules.sh --update
 ```
+
