@@ -10904,8 +10904,9 @@ rule PEiD_1091_Microsoft_Visual_C_8
         description = "[Microsoft Visual C++ 8]"
     strings:
         $a = {E8 ?? ?? 00 00 E9 ?? ?? FF FF}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_1092_Microsoft_Visual_C
