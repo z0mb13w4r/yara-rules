@@ -4,15 +4,15 @@ A collection of YARA rules to identify and classify malware families. They act a
 
 ### How to use ##
 
-```bash
+```
 yara-rules.sh <source/path/name>
 ```
 
-```bash
+```
 yara-rules.sh <source/path/name> {-c|--check} <source/path/yara/rule>
 ```
 
-```bash
+```
 yara-rules.sh {-h|--help}
 ```
 
