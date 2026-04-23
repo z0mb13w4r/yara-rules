@@ -1,5 +1,6 @@
 # yara-rules
 
+A collection of YARA rules to identify and classify malware families. They act as a "swiss knife" for security researchers, facilitating static analysis to detect specific malware variants through meta, string, and condition sections.
 
 ### How to build ###
 
