@@ -2,6 +2,20 @@
 
 A collection of YARA rules to identify and classify malware families. They act as a "swiss knife" for security researchers, facilitating static analysis to detect specific malware variants through meta, string, and condition sections.
 
+### How to use ##
+
+```bash
+yara-rules.sh <source/path/name>
+```
+
+```bash
+yara-rules.sh <source/path/name> {-c|--check} <source/path/yara/rule>
+```
+
+```bash
+yara-rules.sh {-h|--help}
+```
+
 ### How to build ###
 
 See the [BUILD.md](BUILD.md) for detailed instructions.
