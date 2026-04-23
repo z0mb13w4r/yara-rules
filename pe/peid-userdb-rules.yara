@@ -16865,8 +16865,9 @@ rule PEiD_1687_PEtite_v2_2_www_un4seen_com_petite
         description = "[PEtite v2.2 -> www.un4seen.com/petite]"
     strings:
         $a = {B8 ?? ?? ?? ?? 68 ?? ?? ?? ?? 64 FF 35 ?? ?? ?? ?? 64 89 25 ?? ?? ?? ?? 66 9C 60 50}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_1688_Petite_v_after_v1_4
@@ -16925,8 +16926,9 @@ rule PEiD_1693_pex_V0_99_params
         description = "[pex V0.99 -> params]"
     strings:
         $a = {E9 F5 00 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_1694_PEX_v0_99
@@ -21605,8 +21607,9 @@ rule PEiD_2161_Stranik_1_3_Modula_C_Pascal
         description = "[Stranik 1.3 Modula/C/Pascal]"
     strings:
         $a = {E8 ?? ?? FF FF E8 ?? ?? FF FF ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_2162_STUD_RC4_1_0_Jamie_Edition_ScanTime_UnDetectable_by_MarjinZ
