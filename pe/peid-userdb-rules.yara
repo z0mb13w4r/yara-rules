@@ -16855,8 +16855,9 @@ rule PEiD_1686_Petite_v2_2_www_un4seen_com_petite
         description = "[Petite v2.2 -> www.un4seen.com/petite]"
     strings:
         $a = {B8 00 ?? ?? 00 ?? 00 ?? ?? ?? ?? ?? ?? ?? ?? 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_1687_PEtite_v2_2_www_un4seen_com_petite
