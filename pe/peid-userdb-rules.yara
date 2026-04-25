@@ -544,8 +544,9 @@ rule PEiD_0055_Alias_PIX_Vivid_IMG_Graphics_format
         description = "[Alias PIX/Vivid IMG Graphics format]"
     strings:
         $a = {?? ?? ?? ?? 00 00 ?? ?? 00 18 ?? ?? ?? ?? 01}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_0056_Alloy_4_x_PGWare_LLC
@@ -8094,8 +8095,9 @@ rule PEiD_0810_FSG_v1_10_Eng_dulek_xt_Microsoft_Visual_C_6_0_7_0
         description = "[FSG v1.10 (Eng) -> dulek/xt -> (Microsoft Visual C++ 6.0 / 7.0)]"
     strings:
         $a = {EB 02 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 00 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_0811_FSG_v1_10_Eng_dulek_xt_Microsoft_Visual_C_6_0_7_0
@@ -8944,8 +8946,9 @@ rule PEiD_0895_HQR_data_file
         description = "[HQR data file]"
     strings:
         $a = {48 00 00 00 ?? 02 00 00 ?? ?? 00 00 ?? ?? 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_0896_hying_s_PE_Armor_hying_CCG
@@ -21518,8 +21521,9 @@ rule PEiD_2152_StarForce_V3_X_DLL_StarForce_Copy_Protection_System
         description = "[StarForce V3.X DLL -> StarForce Copy Protection System]"
     strings:
         $a = {E8 ?? ?? ?? ?? 00 00 00 00 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_2153_Stealth_PE_v1_1
@@ -35119,8 +35123,9 @@ rule PEiD_3512_Xtreme_Protector_v1_05
         description = "[Xtreme-Protector v1.05]"
     strings:
         $a = {E9 ?? ?? 00 00 00 00 00 00 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_3513_Xtreme_Protector_v1_06
