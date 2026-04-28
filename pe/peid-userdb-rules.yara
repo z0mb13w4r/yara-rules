@@ -12718,8 +12718,9 @@ rule PEiD_1272_Neolite_v2_0
         description = "[Neolite v2.0]"
     strings:
         $a = {E9 A6 00 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_1273_Netopsystems_FEAD_Optimizer
@@ -16278,8 +16279,9 @@ rule PEiD_1628_PEQuake_V0_06_forgat
         description = "[PEQuake V0.06 -> forgat]"
     strings:
         $a = {E8 A5 00 00 00}
+        $pe = "MZ"
     condition:
-        $a
+        $pe at 0 and $a
 }
 
 rule PEiD_1629_PEQuake_v0_06_forgot_us_h
