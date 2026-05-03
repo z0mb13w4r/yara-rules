@@ -192,9 +192,10 @@ rule TOOLS_0006_salsa20_constants
         description = "Salsa20 stream cipher constants. Used by various ransomware"
         reference = "https://github.com/alexwebr/salsa20/blob/master/salsa20.c#L118-L125"
     strings:
-        $ = "expand 32-byte k"
+        $s0 = "expand 16-byte k"
+        $s1 = "expand 32-byte k"
     condition:
-        all of them
+        any of them
 }
 
 rule TOOLS_0007_murmurhash_constants
